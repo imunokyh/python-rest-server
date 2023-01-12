@@ -1,0 +1,33 @@
+version: '3'
+services:
+    nginx:
+        build: ./nginx
+        # image: yhkim/nginx:latest
+        container_name: nginx
+        restart: always
+        links:
+            - flaskrest
+        ports:
+            - '80:80'
+    mariadb:
+        image: mariadb:10.5.9
+        container_name: mariadb
+        restart: always
+        environment: 
+            - MYSQL_ROOT_PASSWORD=1234
+            - MYSQL_DATABASE=test
+        volumes:
+            - ./db_volumes:/var/lib/mysql
+        ports:
+            - '3306:3306'
+    flaskrest:
+        build: ./flaskrest
+        # image: yhkim/flaskrest:latest
+        container_name: flaskrest
+        env_file: database.conf
+        depends_on:
+            - mariadb
+        links:
+            - mariadb
+        expose:
+            - 8080
