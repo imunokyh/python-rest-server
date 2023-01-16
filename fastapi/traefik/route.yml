@@ -1,0 +1,12 @@
+http:
+  routers:
+    fastapi:
+      entryPoints:
+        - http
+      rule: PathPrefix(`/`)
+      service: fastapi-server
+  services:
+    fastapi-server:
+      loadBalancer:
+        servers:
+          - url: 'http://localhost:8000/'
