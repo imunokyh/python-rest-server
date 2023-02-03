@@ -5,6 +5,12 @@ http:
         - http
       rule: PathPrefix(`/`)
       service: fastapi-server
+  middlewares:
+    test-auth:
+      forwardAuth:
+        address: 'http://localhost:8002/auth/token'
+        authResponseHeaders:
+          - "Authorization"
   services:
     fastapi-server:
       loadBalancer:
